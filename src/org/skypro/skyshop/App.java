@@ -24,7 +24,7 @@ public class App {
         // Пробуем добавить 6-й продукт
         basket.addProduct(extra);
 
-        // Печать корзины
+        // Печать корзины (basket)
         basket.printBasket();
 
         // Общая стоимость
