@@ -34,7 +34,7 @@ public class App {
         System.out.println("Есть ли 'Хлеб'? " + basket.containsProduct("Хлеб"));
         System.out.println("Есть ли 'Масло'? " + basket.containsProduct("Масло"));
 
-        // Очистка корзины
+        // Очистка корзины. Имеются изменения
         basket.clearBasket();
 
         // Печать пустой корзины
