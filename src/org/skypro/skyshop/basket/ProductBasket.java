@@ -17,7 +17,7 @@ public class ProductBasket {
     public int getTotalPrice() {
         int sum = 0;
         for (int i = 0; i < size; i++) {
-            sum += products[i].getPrice();  // без параметров, так как getPrice() теперь без параметров
+            sum += products[i].getPrice();
         }
         return sum;
     }
@@ -39,7 +39,6 @@ public class ProductBasket {
         System.out.println("Специальных товаров: " + specialCount);
     }
 
-
     public boolean containsProduct(String name) {
         for (int i = 0; i < size; i++) {
             if (products[i].getName().equalsIgnoreCase(name)) {
@@ -47,7 +46,6 @@ public class ProductBasket {
             }
         }
         return false;
-
     }
 
     public void clearBasket() {
@@ -55,6 +53,5 @@ public class ProductBasket {
             products[i] = null;
         }
         size = 0;
-
     }
 }
