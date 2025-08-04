@@ -9,37 +9,32 @@ public class SearchEngine {
         this.items = items;
     }
 
-    public Searchable[] search(String query) {
-        Searchable[] results = new Searchable[5];
-        int index = 0;
-
-        for (Searchable item : items) {
-            if (item.getSearchTerm().toLowerCase().contains(query.toLowerCase())) {
-                results[index++] = item;
-                if (index == results.length) {
-                    break;
-                }
-            }
-        }
-        return results;
-    }
-
     public Searchable findBestResult(String query) throws BestResultNotFound {
-        int maxCount = 0;
-        Searchable best = null;
+        int max = 0;
+        Searchable result = null;
 
         for (Searchable item : items) {
-            int count = item.countOccurrences(query);
-            if (count > maxCount) {
-                maxCount = count;
-                best = item;
+            int count = countOccurrences(item.getSearchTerm().toLowerCase(), query.toLowerCase());
+            if (count > max) {
+                max = count;
+                result = item;
             }
         }
 
-        if (best == null) {
+        if (result == null || max == 0) {
             throw new BestResultNotFound(query);
         }
 
-        return best;
+        return result;
+    }
+
+    private int countOccurrences(String text, String word) {
+        int count = 0;
+        int index = 0;
+        while ((index = text.indexOf(word, index)) != -1) {
+            count++;
+            index += word.length();
+        }
+        return count;
     }
 }

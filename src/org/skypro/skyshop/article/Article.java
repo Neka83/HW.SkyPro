@@ -11,35 +11,24 @@ public class Article implements Searchable {
             throw new IllegalArgumentException("Заголовок не может быть пустым");
         }
         if (content == null || content.isBlank()) {
-            throw new IllegalArgumentException("Содержимое не может быть пустым");
+            throw new IllegalArgumentException("Контент не может быть пустым");
         }
         this.title = title;
         this.content = content;
     }
 
     @Override
-    public int countOccurrences(String word) {
-        if (word == null || word.isBlank()) {
-            return 0;
-        }
-        String lowerWord = word.toLowerCase();
-        String lowerContent = content.toLowerCase();
-        int count = 0;
-        int index = lowerContent.indexOf(lowerWord);
-        while (index != -1) {
-            count++;
-            index = lowerContent.indexOf(lowerWord, index + lowerWord.length());
-        }
-        return count;
-    }
-
-    @Override
     public String getSearchTerm() {
-        return title;
+        return title + " " + content;
     }
 
     @Override
     public String getContentType() {
         return "ARTICLE";
+    }
+
+    @Override
+    public String toString() {
+        return title + ": " + content;
     }
 }
