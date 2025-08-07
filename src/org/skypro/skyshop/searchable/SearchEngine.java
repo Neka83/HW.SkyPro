@@ -8,7 +8,15 @@ import java.util.List;
 
 public class SearchEngine {
 
-    public List<Searchable> search(String query, List<Searchable> items) throws BestResultNotFound {
+    private List<Searchable> items = new ArrayList<>();
+
+
+    public void addItem(Searchable item) {
+        items.add(item);
+    }
+
+
+    public List<Searchable> search(String query) throws BestResultNotFound {
         List<Searchable> result = new ArrayList<>();
         for (Searchable item : items) {
             if (item.getSearchTerm().toLowerCase().contains(query.toLowerCase())) {
@@ -23,12 +31,13 @@ public class SearchEngine {
         return result;
     }
 
-    public Searchable findBestResult(String search, List<Searchable> items) throws BestResultNotFound {
+
+    public Searchable findBestResult(String query) throws BestResultNotFound {
         int max = 0;
         Searchable result = null;
 
         for (Searchable item : items) {
-            int count = countOccurrences(item.getSearchTerm().toLowerCase(), search.toLowerCase());
+            int count = countOccurrences(item.getSearchTerm().toLowerCase(), query.toLowerCase());
             if (count > max) {
                 max = count;
                 result = item;
@@ -36,11 +45,12 @@ public class SearchEngine {
         }
 
         if (result == null) {
-            throw new BestResultNotFound(search);
+            throw new BestResultNotFound(query);
         }
 
         return result;
     }
+
 
     private int countOccurrences(String text, String word) {
         int count = 0;

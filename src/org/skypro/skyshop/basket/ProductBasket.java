@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ProductBasket {
-
     private final List<Product> products = new ArrayList<>();
 
     public void addProduct(Product product) {
@@ -34,13 +33,11 @@ public class ProductBasket {
             return;
         }
 
-        int total = 0;
         for (Product product : products) {
             System.out.println(product.getName() + ": " + product.getPrice());
-            total += product.getPrice();
         }
 
-        System.out.println("Итого: " + total);
+        System.out.println("Итого: " + getTotalPrice());
     }
 
     public boolean contains(String name) {

@@ -33,7 +33,7 @@ public class App {
         // Удаление существующего продукта
         List<Product> removed = basket.removeProductByName("Яблоко");
         if (removed.isEmpty()) {
-            System.out.println("Список пуст");
+            System.out.println("Продукт не найден для удаления.");
         } else {
             System.out.println("Удалены:");
             for (Product p : removed) {
@@ -52,22 +52,20 @@ public class App {
         basket.printBasket();
 
         // Поиск
-        List<Searchable> items = new ArrayList<>();
-        items.add(new Article("Молоко молоко"));
-        items.add(new Article("Хлеб и масло"));
-        items.add(new Article("Подарочный набор"));
-
         SearchEngine engine = new SearchEngine();
+        engine.addItem(new Article("Молоко молоко"));
+        engine.addItem(new Article("Хлеб и масло"));
+        engine.addItem(new Article("Подарочный набор"));
 
         try {
-            Searchable best = engine.findBestResult("молоко", items);
+            Searchable best = engine.findBestResult("молоко");
             System.out.println("Лучший результат по запросу 'молоко': " + best.getSearchTerm());
         } catch (BestResultNotFound e) {
             System.out.println("Ошибка поиска: " + e.getMessage());
         }
 
         try {
-            List<Searchable> results = engine.search("подарок", items);
+            List<Searchable> results = engine.search("подарок");
             if (results.isEmpty()) {
                 System.out.println("Результаты поиска не найдены");
             } else {
