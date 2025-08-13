@@ -1,81 +1,46 @@
 package org.skypro.skyshop;
 
 import org.skypro.skyshop.basket.ProductBasket;
-import org.skypro.skyshop.exception.BestResultNotFound;
-import org.skypro.skyshop.product.Product;
-import org.skypro.skyshop.product.SimpleProduct;
-import org.skypro.skyshop.product.DiscountedProduct;
-import org.skypro.skyshop.product.FixPriceProduct;
-import org.skypro.skyshop.searchEngine.SearchEngine;
+import org.skypro.skyshop.product.*;
+import org.skypro.skyshop.search.SearchEngine;
 import org.skypro.skyshop.searchable.Article;
 import org.skypro.skyshop.searchable.Searchable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class App {
     public static void main(String[] args) {
+        // Корзина
         ProductBasket basket = new ProductBasket();
-
         basket.addProduct(new SimpleProduct("Яблоко", 100));
-        basket.addProduct(new SimpleProduct("Банан", 120));
-        basket.addProduct(new SimpleProduct("Молоко", 80));
-        basket.addProduct(new SimpleProduct("Хлеб", 50));
         basket.addProduct(new FixPriceProduct("Сыр"));
+        basket.addProduct(new FixPriceProduct("Молоко"));
+        basket.addProduct(new SimpleProduct("Хлеб", 50));
 
-        basket.printBasket();
-        System.out.println("Специальных товаров: " + basket.countSpecialProducts());
-        System.out.println("Общая стоимость: " + basket.getTotalPrice());
-
-        System.out.println("Есть ли 'Хлеб'? " + basket.contains("Хлеб"));
-        System.out.println("Есть ли 'Масло'? " + basket.contains("Масло"));
-
-        // Удаление существующего продукта
-        List<Product> removed = basket.removeProductByName("Яблоко");
-        if (removed.isEmpty()) {
-            System.out.println("Продукт не найден для удаления.");
-        } else {
-            System.out.println("Удалены:");
-            for (Product p : removed) {
-                System.out.println(p.getName() + ": " + p.getPrice());
-            }
-        }
-
+        System.out.println("Корзина:");
         basket.printBasket();
 
-        // Удаление несуществующего
-        List<Product> notFound = basket.removeProductByName("Масло");
-        if (notFound.isEmpty()) {
-            System.out.println("Список пуст");
-        }
-
+        // Удаление продукта
+        List<Product> removed = basket.removeProduct("Хлеб");
+        System.out.println("\nПосле удаления Хлеба:");
+        if (removed.isEmpty()) System.out.println("Продукт не найден");
         basket.printBasket();
 
         // Поиск
-        SearchEngine engine = new SearchEngine();
-        engine.addItem(new Article("Молоко молоко"));
-        engine.addItem(new Article("Хлеб и масло"));
-        engine.addItem(new Article("Подарочный набор"));
+        List<Searchable> items = new ArrayList<>();
+        items.add(new FixPriceProduct("Сыр"));
+        items.add(new Article("Рецепт сыра"));
+        items.add(new Article("Фрукты: яблоки и бананы"));
 
-        try {
-            Searchable best = engine.findBestResult("молоко");
-            System.out.println("Лучший результат по запросу 'молоко': " + best.getSearchTerm());
-        } catch (BestResultNotFound e) {
-            System.out.println("Ошибка поиска: " + e.getMessage());
-        }
+        SearchEngine searchEngine = new SearchEngine(items);
+        String query = "сыр";
 
-        try {
-            List<Searchable> results = engine.search("подарок");
-            if (results.isEmpty()) {
-                System.out.println("Результаты поиска не найдены");
-            } else {
-                System.out.println("Результаты поиска:");
-                for (Searchable s : results) {
-                    System.out.println(s.getSearchTerm());
-                }
-            }
-        } catch (BestResultNotFound e) {
-            System.out.println("Ошибка поиска: " + e.getMessage());
+        System.out.println("\nРезультаты поиска по запросу \"" + query + "\":");
+        Map<String, Searchable> results = searchEngine.search(query);
+        if (results.isEmpty()) {
+            System.out.println("Ничего не найдено");
+        } else {
+            results.forEach((name, item) -> System.out.println(name + " → " + item.getSearchTerm()));
         }
     }
 }

@@ -1,7 +1,7 @@
 package org.skypro.skyshop.searchable;
 
 public class Article implements Searchable {
-    private String content;
+    private final String content;
 
     public Article(String content) {
         this.content = content;
@@ -14,7 +14,7 @@ public class Article implements Searchable {
 
     @Override
     public String getContentType() {
-        return "Article";
+        return "ARTICLE";
     }
 
     @Override

@@ -1,64 +1,27 @@
-package org.skypro.skyshop.searchEngine;
+package org.skypro.skyshop.search;
 
-import org.skypro.skyshop.exception.BestResultNotFound;
 import org.skypro.skyshop.searchable.Searchable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SearchEngine {
+    private final List<Searchable> items;
 
-    private List<Searchable> items = new ArrayList<>();
-
-
-    public void addItem(Searchable item) {
-        items.add(item);
+    public SearchEngine(List<Searchable> items) {
+        this.items = items;
     }
 
+    public Map<String, Searchable> search(String keyword) {
+        Map<String, Searchable> results = new TreeMap<>();
+        if (keyword == null || keyword.isBlank()) return results;
 
-    public List<Searchable> search(String query) throws BestResultNotFound {
-        List<Searchable> result = new ArrayList<>();
+        String lowerKeyword = keyword.toLowerCase();
         for (Searchable item : items) {
-            if (item.getSearchTerm().toLowerCase().contains(query.toLowerCase())) {
-                result.add(item);
+            String content = item.getSearchTerm();
+            if (content != null && content.toLowerCase().contains(lowerKeyword)) {
+                results.put(item.getSearchTerm(), item);
             }
         }
-
-        if (result.isEmpty()) {
-            throw new BestResultNotFound(query);
-        }
-
-        return result;
-    }
-
-
-    public Searchable findBestResult(String query) throws BestResultNotFound {
-        int max = 0;
-        Searchable result = null;
-
-        for (Searchable item : items) {
-            int count = countOccurrences(item.getSearchTerm().toLowerCase(), query.toLowerCase());
-            if (count > max) {
-                max = count;
-                result = item;
-            }
-        }
-
-        if (result == null) {
-            throw new BestResultNotFound(query);
-        }
-
-        return result;
-    }
-
-
-    private int countOccurrences(String text, String word) {
-        int count = 0;
-        int index = 0;
-        while ((index = text.indexOf(word, index)) != -1) {
-            count++;
-            index += word.length();
-        }
-        return count;
+        return results;
     }
 }

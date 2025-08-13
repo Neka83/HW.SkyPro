@@ -2,29 +2,18 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class ProductBasket {
-    private final List<Product> products = new ArrayList<>();
+    private final Map<String, List<Product>> products = new HashMap<>();
 
     public void addProduct(Product product) {
-        products.add(product);
+        products.computeIfAbsent(product.getName(), k -> new ArrayList<>()).add(product);
     }
 
-    public List<Product> removeProductByName(String name) {
-        List<Product> removed = new ArrayList<>();
-        Iterator<Product> iterator = products.iterator();
-
-        while (iterator.hasNext()) {
-            Product product = iterator.next();
-            if (product.getName().equalsIgnoreCase(name)) {
-                removed.add(product);
-                iterator.remove();
-            }
-        }
-        return removed;
+    public List<Product> removeProduct(String name) {
+        List<Product> removed = products.remove(name);
+        return removed != null ? removed : new ArrayList<>();
     }
 
     public void printBasket() {
@@ -33,27 +22,25 @@ public class ProductBasket {
             return;
         }
 
-        for (Product product : products) {
-            System.out.println(product.getName() + ": " + product.getPrice());
+        int total = 0;
+        for (Map.Entry<String, List<Product>> entry : products.entrySet()) {
+            for (Product p : entry.getValue()) {
+                System.out.println(p.getName() + ": " + p.getPrice());
+                total += p.getPrice();
+            }
         }
-
-        System.out.println("Итого: " + getTotalPrice());
+        System.out.println("Итого: " + total);
     }
 
     public boolean contains(String name) {
-        for (Product product : products) {
-            if (product.getName().equalsIgnoreCase(name)) {
-                return true;
-            }
-        }
-        return false;
+        return products.containsKey(name);
     }
 
     public int getTotalPrice() {
-        return products.stream().mapToInt(Product::getPrice).sum();
+        return products.values().stream().flatMap(List::stream).mapToInt(Product::getPrice).sum();
     }
 
     public int countSpecialProducts() {
-        return (int) products.stream().filter(Product::isSpecial).count();
+        return (int) products.values().stream().flatMap(List::stream).filter(Product::isSpecial).count();
     }
 }
