@@ -1,7 +1,6 @@
 package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
-
 import java.util.*;
 
 public class ProductBasket {
@@ -21,10 +20,9 @@ public class ProductBasket {
             System.out.println("В корзине пусто");
             return;
         }
-
         int total = 0;
-        for (Map.Entry<String, List<Product>> entry : products.entrySet()) {
-            for (Product p : entry.getValue()) {
+        for (List<Product> list : products.values()) {
+            for (Product p : list) {
                 System.out.println(p.getName() + ": " + p.getPrice());
                 total += p.getPrice();
             }

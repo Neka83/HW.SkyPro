@@ -1,25 +1,28 @@
 package org.skypro.skyshop.search;
 
 import org.skypro.skyshop.searchable.Searchable;
-
 import java.util.*;
 
 public class SearchEngine {
-    private final List<Searchable> items;
+    private final Set<Searchable> items;
 
-    public SearchEngine(List<Searchable> items) {
-        this.items = items;
+    public SearchEngine() {
+        this.items = new HashSet<>();
     }
 
-    public Map<String, Searchable> search(String keyword) {
-        Map<String, Searchable> results = new TreeMap<>();
-        if (keyword == null || keyword.isBlank()) return results;
+    public void addItem(Searchable item) {
+        items.add(item); // HashSet не добавит дубликаты
+    }
+
+    public Set<Searchable> search(String keyword) {
+        if (keyword == null || keyword.isBlank()) return new TreeSet<>(SearchableComparators.SEARCHABLE_COMPARATOR);
 
         String lowerKeyword = keyword.toLowerCase();
+        Set<Searchable> results = new TreeSet<>(SearchableComparators.SEARCHABLE_COMPARATOR);
+
         for (Searchable item : items) {
-            String content = item.getSearchTerm();
-            if (content != null && content.toLowerCase().contains(lowerKeyword)) {
-                results.put(item.getSearchTerm(), item);
+            if (item.getSearchTerm().toLowerCase().contains(lowerKeyword)) {
+                results.add(item);
             }
         }
         return results;
