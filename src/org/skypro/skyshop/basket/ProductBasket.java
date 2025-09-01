@@ -17,7 +17,7 @@ public class ProductBasket {
     public int getTotalPrice() {
         int sum = 0;
         for (int i = 0; i < size; i++) {
-            sum += products[i].getPrice();
+            sum += products[i].getPrice();  // без параметров, так как getPrice() теперь без параметров
         }
         return sum;
     }
@@ -27,12 +27,18 @@ public class ProductBasket {
             System.out.println("В корзине пусто");
             return;
         }
+        int specialCount = 0;
         for (int i = 0; i < size; i++) {
-            System.out.println(products[i].getName() + ": " + products[i].getPrice());
+            Product product = products[i];
+            System.out.println(product.toString());
+            if (product.isSpecial()) {
+                specialCount++;
+            }
         }
         System.out.println("Итого: " + getTotalPrice());
-
+        System.out.println("Специальных товаров: " + specialCount);
     }
+
 
     public boolean containsProduct(String name) {
         for (int i = 0; i < size; i++) {
