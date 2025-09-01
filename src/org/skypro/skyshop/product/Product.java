@@ -18,6 +18,10 @@ public abstract class Product implements Searchable {
 
     public abstract int getPrice();
 
+ Homework-Exceptions
+
+
+ Homework-skypro.packages&classes
     public boolean isSpecial() {
         return false;
     }
@@ -36,4 +40,11 @@ public abstract class Product implements Searchable {
     public String getContentType() {
         return "PRODUCT";
     }
+ Homework-Exceptions
 }
+
+
+
+}
+
+ Homework-skypro.packages&classes

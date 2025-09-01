@@ -2,6 +2,7 @@ package org.skypro.skyshop.article;
 
 import org.skypro.skyshop.searchable.Searchable;
 
+Homework-Exceptions
 public class Article implements Searchable {
     private final String title;
     private final String content;
@@ -15,11 +16,37 @@ public class Article implements Searchable {
         }
         this.title = title;
         this.content = content;
+
+public final class Article implements Searchable {
+    private final String title;
+    private final String text;
+
+    public Article(String title, String text) {
+        this.title = title;
+        this.text = text;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    @Override
+    public String toString() {
+        return title + "\n" + text;
+ Homework-skypro.packages&classes
     }
 
     @Override
     public String getSearchTerm() {
+ Homework-Exceptions
         return title + " " + content;
+
+        return toString();
+ Homework-skypro.packages&classes
     }
 
     @Override
@@ -28,7 +55,12 @@ public class Article implements Searchable {
     }
 
     @Override
+Homework-Exceptions
     public String toString() {
         return title + ": " + content;
+
+    public String getName() {
+        return title;
+Homework-skypro.packages&classes
     }
 }
