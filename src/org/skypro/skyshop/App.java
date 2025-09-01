@@ -41,7 +41,11 @@ public class App {
         System.out.println("Есть ли 'Хлеб'? " + basket.containsProduct("Хлеб"));
         System.out.println("Есть ли 'Масло'? " + basket.containsProduct("Масло"));
 
+        Homework-polymorphism
 
+
+        // Очистка корзины. Имеются изменения
+        Homework-skypro.packages&classes
         basket.clearBasket();
 
 
