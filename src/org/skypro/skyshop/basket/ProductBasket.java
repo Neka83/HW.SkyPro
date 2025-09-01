@@ -12,7 +12,7 @@ public class ProductBasket {
 
     public List<Product> removeProduct(String name) {
         List<Product> removed = products.remove(name);
-        return removed != null ? removed : new ArrayList<>();
+        return removed != null ? removed : Collections.emptyList();
     }
 
     public void printBasket() {
@@ -20,13 +20,11 @@ public class ProductBasket {
             System.out.println("В корзине пусто");
             return;
         }
-        int total = 0;
-        for (List<Product> list : products.values()) {
-            for (Product p : list) {
-                System.out.println(p.getName() + ": " + p.getPrice());
-                total += p.getPrice();
-            }
-        }
+        int total = products.values().stream()
+                .flatMap(List::stream)
+                .peek(p -> System.out.println(p.getName() + ": " + p.getPrice()))
+                .mapToInt(Product::getPrice)
+                .sum();
         System.out.println("Итого: " + total);
     }
 
@@ -35,10 +33,16 @@ public class ProductBasket {
     }
 
     public int getTotalPrice() {
-        return products.values().stream().flatMap(List::stream).mapToInt(Product::getPrice).sum();
+        return products.values().stream()
+                .flatMap(List::stream)
+                .mapToInt(Product::getPrice)
+                .sum();
     }
 
     public int countSpecialProducts() {
-        return (int) products.values().stream().flatMap(List::stream).filter(Product::isSpecial).count();
+        return (int) products.values().stream()
+                .flatMap(List::stream)
+                .filter(Product::isSpecial)
+                .count();
     }
 }

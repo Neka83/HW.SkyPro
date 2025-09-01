@@ -1,9 +1,13 @@
 package org.skypro.skyshop.search;
 
 import org.skypro.skyshop.searchable.Searchable;
+import org.skypro.skyshop.search.SearchableComparators;
+
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SearchEngine {
+
     private final Set<Searchable> items;
 
     public SearchEngine() {
@@ -11,20 +15,19 @@ public class SearchEngine {
     }
 
     public void addItem(Searchable item) {
-        items.add(item); // HashSet не добавит дубликаты
+        items.add(item);
     }
 
     public Set<Searchable> search(String keyword) {
-        if (keyword == null || keyword.isBlank()) return new TreeSet<>(SearchableComparators.SEARCHABLE_COMPARATOR);
+        if (keyword == null || keyword.isBlank()) {
+            return new TreeSet<>(SearchableComparators.SEARCHABLE_COMPARATOR);
+        }
 
         String lowerKeyword = keyword.toLowerCase();
-        Set<Searchable> results = new TreeSet<>(SearchableComparators.SEARCHABLE_COMPARATOR);
 
-        for (Searchable item : items) {
-            if (item.getSearchTerm().toLowerCase().contains(lowerKeyword)) {
-                results.add(item);
-            }
-        }
-        return results;
+
+        return items.stream()
+                .filter(item -> item.getSearchTerm().toLowerCase().contains(lowerKeyword))
+                .collect(Collectors.toCollection(() -> new TreeSet<>(SearchableComparators.SEARCHABLE_COMPARATOR)));
     }
 }
